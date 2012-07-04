@@ -32,3 +32,7 @@ class ContactTest(TestCase):
         self.assertEqual(used_templates, ['base.html', 'index.html'])
 
         self.assertContains(response, 'Vykalyuk', status_code=200)
+
+        bad_response = self.client.get('/something')
+        self.assertEqual(bad_response.status_code, 404)
+        self.assertTemplateUsed(bad_response, '404.html')
