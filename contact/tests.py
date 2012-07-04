@@ -6,6 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from django.test.client import Client
 
 
 class SimpleTest(TestCase):
@@ -14,3 +15,20 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+
+class ContactTest(TestCase):
+    fixtures = ['initial_data.json']
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_contact(self):
+        response = self.client.get('/')
+
+        self.assertEqual(response.status_code, 200)
+
+        used_templates = [template.name for template in response.templates]
+        self.assertEqual(used_templates, ['base.html', 'index.html'])
+
+        self.assertContains(response, 'Vykalyuk', status_code=200)
