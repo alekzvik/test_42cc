@@ -6,3 +6,6 @@ class RequestEntry(models.Model):
     method = models.CharField(max_length=200)
     query = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta():
+        ordering = ["-timestamp"]
