@@ -38,8 +38,11 @@ class LogsTest(TestCase):
         RequestEntry.objects.all().delete()
 
 
-class Test(TestCase):
+class ViewTest(TestCase):
     def test_view(self):
         response = self.client.get('/requests')
         self.assertContains(response, 'GET')
         self.assertContains(response, '/requests')
+
+    def tearDown(self):
+        RequestEntry.objects.all().delete()
