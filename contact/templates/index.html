@@ -3,8 +3,17 @@
 {% block title %}Contacts{% endblock %}
 
 {% block content %}
+<style>
+.left-column { float:left; width: 50%;}
+</style>
 <article>
     <h1>42 Coffee Cups Test Assignment</h1>
+    <div class="left-column">
+        <p>Name: {{ info.name }}</p>
+        <p>Last name: {{ info.last_name }}</p>
+        <p>Date of birth: {{ info.birth_date }}</p>
+        <p>Bio:</p>{{ info.bio|linebreaks }}
+    </div>
     <div class="right-column">
         <p>Contacts</p>
         <p>Email: {{ info.email }}</p>
@@ -13,12 +22,7 @@
         <p>Other contacts:</p>
         {{ info.other_contacts|linebreaks }}
     </div>
-    <div class="left-column">
-        <p>Name: {{ info.name }}</p>
-        <p>Last name: {{ info.last_name }}</p>
-        <p>Date of birth: {{ info.birth_date }}</p>
-        <p>Bio:</p>{{ info.bio|linebreaks }}
-    </div>
+
 
 </article>
 {% endblock %}
