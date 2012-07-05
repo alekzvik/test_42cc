@@ -1,4 +1,4 @@
-app=contact
+app=contact requests_log
 
 run:
 	python manage.py runserver

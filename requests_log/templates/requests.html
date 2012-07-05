@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Requests{% endblock %}
+{% block content %}
+<table>
+    <tr>
+        <th>#</th>
+        <th>Path</th>
+        <th>Method</th>
+        <th>Query</th>
+        <th>Time</th>
+    </tr>
+    {% for request in requests %}
+    <tr>
+        <td>{{ request.pk }}</td>
+        <td>{{ request.path }}</td>
+        <td>{{ request.method }}</td>
+        <td>{{ request.query }}</td>
+        <td>{{ request.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
