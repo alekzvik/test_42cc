@@ -29,7 +29,7 @@ class ContactTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         used_templates = [template.name for template in response.templates]
-        self.assertEqual(used_templates, ['base.html', 'index.html'])
+        self.assertEqual(used_templates, ['index.html', 'base.html'])
 
         self.assertContains(response, 'Vykalyuk', status_code=200)
 
