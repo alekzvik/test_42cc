@@ -1,20 +1,8 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
 from django.test.client import Client
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+from django.core.urlresolvers import reverse
+from contact.models import Contact
+from django.template.defaultfilters import escape, date, linebreaks
 
 
 class ContactTest(TestCase):
@@ -24,15 +12,23 @@ class ContactTest(TestCase):
         self.client = Client()
 
     def test_contact(self):
-        response = self.client.get('/')
+        response = self.client.get(reverse('contact.views.index'))
 
         self.assertEqual(response.status_code, 200)
 
-        used_templates = [template.name for template in response.templates]
-        self.assertEqual(used_templates, ['index.html', 'base.html'])
+        data = Contact.objects.get()
+        self.assertContains(response, data.name)
+        self.assertContains(response, data.last_name)
+        self.assertContains(response, date(data.birth_date))
+        self.assertContains(response, data.email)
+        self.assertContains(response, data.skype)
+        self.assertContains(response, data.jabber)
+        self.assertContains(response, linebreaks(escape(data.bio)))
+        self.assertContains(response, linebreaks(escape(data.other_contacts)))
 
-        self.assertContains(response, 'Vykalyuk', status_code=200)
 
+class BadResponseTest(TestCase):
+    def test_404(self):
         bad_response = self.client.get('/something')
         self.assertEqual(bad_response.status_code, 404)
         self.assertTemplateUsed(bad_response, '404.html')
