@@ -1,13 +1,6 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
-# from django.test.client import Client
 from requests_log.models import RequestEntry
+from django.core.urlresolvers import reverse
 
 
 class NoLogsTest(TestCase):
@@ -18,7 +11,7 @@ class NoLogsTest(TestCase):
 
 class LinkTest(TestCase):
     def test_link(self):
-        response = self.client.get('/')
+        response = self.client.get(reverse('contact.views.index'))
         self.assertContains(response, 'href="/requests"')
 
     def tearDown(self):
@@ -30,7 +23,7 @@ class LogsTest(TestCase):
 
     def test_log(self):
         for i in range(self.TRIES):
-            self.client.get('/')
+            self.client.get(reverse('contact.views.index'))
         logs = RequestEntry.objects.all()
         self.assertEqual(logs.count(), 20)
 
@@ -40,7 +33,7 @@ class LogsTest(TestCase):
 
 class ViewTest(TestCase):
     def test_view(self):
-        response = self.client.get('/requests')
+        response = self.client.get(reverse('requests_view'))
         self.assertContains(response, 'GET')
         self.assertContains(response, '/requests')
 
