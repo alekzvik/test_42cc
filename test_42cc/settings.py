@@ -102,6 +102,10 @@ MIDDLEWARE_CLASSES = (
     'requests_log.middleware.RequestsLogMiddleware'
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'contact.context_processors.settings',
+)
+
 ROOT_URLCONF = 'test_42cc.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
