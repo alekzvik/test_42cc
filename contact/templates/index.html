@@ -2,17 +2,26 @@
 
 {% block title %}Contacts{% endblock %}
 
+{% block header %}
+    <a href="{% url contact_edit %}" style="float: right;">Edit</a>
+    <h1>42 Coffee Cups Test Assignment</h1>
+{% endblock %}
+
 {% block content %}
 <style>
-.left-column { float:left; width: 50%;}
+.left-column { float:left; width: 50%; }
+.right-column { float:right; width: 50%; }
+footer {clear: both;}
 </style>
 <article>
-    <h1>42 Coffee Cups Test Assignment</h1>
     <div class="left-column">
         <p>Name: {{ info.name }}</p>
         <p>Last name: {{ info.last_name }}</p>
         <p>Date of birth: {{ info.birth_date }}</p>
-        <p>Bio:</p>{{ info.bio|linebreaks }}
+        Photo:<br />
+        {% if info.photo %}
+            <img src="{{ info.photo.url }}" alt="Photo" />
+        {% endif %}
     </div>
     <div class="right-column">
         <p>Contacts</p>
@@ -21,6 +30,7 @@
         <p>Skype: {{ info.skype }}</p>
         <p>Other contacts:</p>
         {{ info.other_contacts|linebreaks }}
+        <p>Bio:</p>{{ info.bio|linebreaks }}
     </div>
 </article>
 {% endblock %}
