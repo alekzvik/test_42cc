@@ -1,15 +1,14 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from contact.models import Contact
 from django.template.defaultfilters import escape, date, linebreaks
+from django.template import RequestContext
+from django.conf import settings
+from django.test.client import RequestFactory
 
 
 class ContactTest(TestCase):
     fixtures = ['initial_data.json']
-
-    def setUp(self):
-        self.client = Client()
 
     def test_contact(self):
         response = self.client.get(reverse('contact.views.index'))
@@ -32,3 +31,11 @@ class BadResponseTest(TestCase):
         bad_response = self.client.get('/something')
         self.assertEqual(bad_response.status_code, 404)
         self.assertTemplateUsed(bad_response, '404.html')
+
+
+class SettingsContextProcessorTest(TestCase):
+    def test_context_processor(self):
+        f = RequestFactory()
+        r = RequestContext(f.request())
+        for k, v in settings.__dict__.items():
+            self.assertIn(v, r['settings'])
