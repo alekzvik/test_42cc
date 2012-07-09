@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.left-column { float:left; width: 50%;}
+</style>
+<form id="ContactForm" action="" method="post">
+    {% csrf_token %}
+    <div class="left-column">
+    {% for field in form %}
+
+        {{ field.label_tag }}
+        {{ field }}
+        <div class="errorfield">{{ field.errors }}</div>
+        {% if field.name = 'birth_date' %}
+        </div>
+        <div class="right-column">
+        {% endif %}
+    {% endfor %}
+    </div>
+    <input type="submit" value="Save" />
+    <a href="{% url contact.views.index %}">Cancel</a>
+</form>
+{% endblock %}
+{% block footer %}
+<hr />
+<a href="{% url requests_view %}">requests</a>
+{% endblock %}

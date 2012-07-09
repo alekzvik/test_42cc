@@ -5,6 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('',
     url(r'^$', 'contact.views.index'),
-    url(r'^edit/$', login_required(ContactUpdate.as_view()),
+    url(r'^edit/$', login_required(ContactUpdate.as_view()), {'pk': 1},
         name='contact_edit'),
 )

@@ -14,7 +14,6 @@ def index(request):
 
 class ContactUpdate(UpdateView):
     model = Contact
-    queryset = get_object_or_404(Contact)
     form_class = ContactForm
     context_object_name = 'contact'
     # success_url = reverse('contact.views.index')
