@@ -36,6 +36,5 @@ class BadResponseTest(TestCase):
 class SettingsContextProcessorTest(TestCase):
     def test_context_processor(self):
         f = RequestFactory()
-        r = RequestContext(f.request())
-        for k, v in settings.__dict__.items():
-            self.assertIn(v, r['settings'])
+        c = RequestContext(f.request())
+        self.assertTrue(c.get('settings') is settings)
