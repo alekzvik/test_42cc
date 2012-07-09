@@ -42,17 +42,17 @@ class SettingsContextProcessorTest(TestCase):
 
 class ContactEditTest(TestCase):
     def test_login(self):
-        self.client.get(reverse('contact.views.contact_edit'))
-        self.assertEqual(self.response.status_code, 302)
+        response = self.client.get(reverse('contact_edit'))
+        self.assertEqual(response.status_code, 302)
 
         self.client.login(username='admin', password='admin')
-        self.client.get(reverse('contact.views.contact_edit'))
-        self.assertEqual(self.response.status_code, 200)
+        response = self.client.get(reverse('contact_edit'))
+        self.assertEqual(response.status_code, 200)
 
     def test_form_get(self):
         data = Contact.objects.get()
         self.client.login(username='admin', password='admin')
-        response = self.client.get(reverse('contact.views.contact_edit'))
+        response = self.client.get(reverse('contact_edit'))
 
         self.assertContains(response, data.name)
         self.assertContains(response, data.last_name)
@@ -75,9 +75,9 @@ class ContactEditTest(TestCase):
         data['other_contact'] = "My facebook: facebook.com/rpoulsen"
 
         self.client.login(username='admin', password='admin')
-        self.client.post(reverse('contact.views.contact_edit'), data)
+        response = self.client.post(reverse('contact_edit'), data)
 
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Contact.objects.count(), 1)
 
         for item in data.values():
