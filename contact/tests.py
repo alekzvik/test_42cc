@@ -38,3 +38,48 @@ class SettingsContextProcessorTest(TestCase):
         f = RequestFactory()
         c = RequestContext(f.request())
         self.assertTrue(c.get('settings') is settings)
+
+
+class ContactEditTest(TestCase):
+    def test_login(self):
+        self.client.get(reverse('contact.views.contact_edit'))
+        self.assertEqual(self.response.status_code, 302)
+
+        self.client.login(username='admin', password='admin')
+        self.client.get(reverse('contact.views.contact_edit'))
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_form_get(self):
+        data = Contact.objects.get()
+        self.client.login(username='admin', password='admin')
+        response = self.client.get(reverse('contact.views.contact_edit'))
+
+        self.assertContains(response, data.name)
+        self.assertContains(response, data.last_name)
+        self.assertContains(response, date(data.birth_date))
+        self.assertContains(response, data.email)
+        self.assertContains(response, data.skype)
+        self.assertContains(response, data.jabber)
+        self.assertContains(response, linebreaks(escape(data.bio)))
+        self.assertContains(response, linebreaks(escape(data.other_contacts)))
+
+    def test_form_post(self):
+        data = dict()
+        data['name'] = 'Robin'
+        data['last_name'] = 'Poulsen'
+        data['birth_date'] = '1983-01-05'
+        data['email'] = 'rpoulsen@gmail.com'
+        data['jabber'] = 'rpoulsen@gmail.com'
+        data['skype'] = 'rpoulsen'
+        data['bio'] = "I'm a sweden django guru."
+        data['other_contact'] = "My facebook: facebook.com/rpoulsen"
+
+        self.client.login(username='admin', password='admin')
+        self.client.post(reverse('contact.views.contact_edit'), data)
+
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(Contact.objects.count(), 1)
+
+        for item in data.values():
+            self.assertContains(self.response, item)
+
