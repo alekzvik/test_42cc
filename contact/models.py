@@ -10,3 +10,4 @@ class Contact(models.Model):
     skype = models.CharField(max_length=200)
     bio = models.TextField()
     other_contacts = models.TextField()
+    photo = models.ImageField(upload_to='photos', blank=True, null=True)

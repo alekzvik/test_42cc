@@ -1,0 +1,16 @@
+.left-column { float:left; width: 50%; }
+
+.right-column { float:right; width: 50%; }
+
+footer {clear: both;}
+
+textarea {
+    display: block;
+    clear: both;
+}
+
+.clearer {
+    display: hidden;
+    clear: both;
+}
+
