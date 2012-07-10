@@ -41,6 +41,9 @@ class SettingsContextProcessorTest(TestCase):
 
 
 class ContactEditTest(TestCase):
+    def tearDown(self):
+        self.client.logout()
+
     def test_login(self):
         response = self.client.get(reverse('contact_edit'))
         self.assertEqual(response.status_code, 302)
@@ -56,12 +59,12 @@ class ContactEditTest(TestCase):
 
         self.assertContains(response, data.name)
         self.assertContains(response, data.last_name)
-        self.assertContains(response, date(data.birth_date))
+        self.assertContains(response, data.birth_date)
         self.assertContains(response, data.email)
         self.assertContains(response, data.skype)
         self.assertContains(response, data.jabber)
-        self.assertContains(response, linebreaks(escape(data.bio)))
-        self.assertContains(response, linebreaks(escape(data.other_contacts)))
+        self.assertContains(response, escape(data.bio))
+        self.assertContains(response, escape(data.other_contacts))
 
     def test_form_post(self):
         data = dict()
@@ -72,14 +75,21 @@ class ContactEditTest(TestCase):
         data['jabber'] = 'rpoulsen@gmail.com'
         data['skype'] = 'rpoulsen'
         data['bio'] = "I'm a sweden django guru."
-        data['other_contact'] = "My facebook: facebook.com/rpoulsen"
+        data['other_contacts'] = "My facebook: facebook.com/rpoulsen"
 
         self.client.login(username='admin', password='admin')
-        response = self.client.post(reverse('contact_edit'), data)
+        response = self.client.post(reverse('contact_edit'), data, follow=True)
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(Contact.objects.count(), 1)
 
-        for item in data.values():
-            self.assertContains(self.response, item)
-
+        self.assertContains(response, data['name'])
+        self.assertContains(response, data['last_name'])
+        self.assertContains(response, date(data['birth_date']))
+        self.assertContains(response, data['email'])
+        self.assertContains(response, data['jabber'])
+        self.assertContains(response, data['skype'])
+        self.assertContains(response, escape(data['bio']))
+        self.assertContains(response, data['other_contacts'])
+        # for item in data.values():
+        #     self.assertContains(response, escape(item))
