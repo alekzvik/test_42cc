@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<style>
-.left-column { float:left; width: 50%;}
-</style>
-<form id="ContactForm" action="" method="post">
+<form id="ContactForm" enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
     <div class="left-column">
     {% for field in form %}
@@ -11,12 +8,16 @@
         {{ field.label_tag }}
         {{ field }}
         <div class="errorfield">{{ field.errors }}</div>
-        {% if field.name = 'birth_date' %}
+        {% if field.name = 'photo' %}
+            {% if contact.photo %}
+                <img src="{{ contact.photo.url }}" alt="Photo" />
+            {% endif %}
         </div>
         <div class="right-column">
         {% endif %}
     {% endfor %}
     </div>
+    <div class="clearer"></div>
     <input type="submit" value="Save" />
     <a href="{% url contact.views.index %}">Cancel</a>
 </form>
