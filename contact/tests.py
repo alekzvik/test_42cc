@@ -5,6 +5,8 @@ from django.template.defaultfilters import escape, date, linebreaks
 from django.template import RequestContext
 from django.conf import settings
 from django.test.client import RequestFactory
+from django.db import models
+from contact.management.commands.print_models import Command
 
 
 class ContactTest(TestCase):
@@ -100,3 +102,13 @@ class EditLinkTest(TestCase):
         response = self.client.get(reverse('contact.views.index'))
         admin_url = reverse('admin:contact_contact_change', args=(1,))
         self.assertContains(response, admin_url)
+
+
+class CommandTest(TestCase):
+    def test_models_command(self):
+        result = {}
+        all_models = models.get_models()
+        for model in all_models:
+            result[model] = model.count()
+        command = Command()
+        self.assertEqual(command.project_models, result)
