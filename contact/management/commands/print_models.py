@@ -8,9 +8,9 @@ class Command(BaseCommand):
         report = []
         models_dict = self.project_models()
         for key, value in models_dict.items():
-            report.append("%s: %d" % (key.__name__, value))
-        sys.stdout.write('\n'.join(report))
-        sys.stderr.write('\n'.join(['error:' + item for item in report]))
+            report.append("%s: %d\n" % (key.__name__, value))
+        sys.stdout.write(''.join(report))
+        sys.stderr.write(''.join(['error: ' + item for item in report]))
 
     def project_models(self):
         result = {}
