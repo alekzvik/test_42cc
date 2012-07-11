@@ -8,29 +8,24 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.left-column { float:left; width: 50%; }
-.right-column { float:right; width: 50%; }
-footer {clear: both;}
-</style>
 <article>
     <div class="left-column">
-        <p>Name: {{ info.name }}</p>
-        <p>Last name: {{ info.last_name }}</p>
-        <p>Date of birth: {{ info.birth_date }}</p>
+        <p>Name: {{ contact.name }}</p>
+        <p>Last name: {{ contact.last_name }}</p>
+        <p>Date of birth: {{ contact.birth_date }}</p>
         Photo:<br />
-        {% if info.photo %}
-            <img src="{{ info.photo.url }}" alt="Photo" />
+        {% if contact.photo %}
+            <img src="{{ contact.photo.url }}" alt="Photo" />
         {% endif %}
     </div>
     <div class="right-column">
         <p>Contacts</p>
-        <p>Email: {{ info.email }}</p>
-        <p>Jabber: {{ info.jabber }}</p>
-        <p>Skype: {{ info.skype }}</p>
+        <p>Email: {{ contact.email }}</p>
+        <p>Jabber: {{ contact.jabber }}</p>
+        <p>Skype: {{ contact.skype }}</p>
         <p>Other contacts:</p>
-        {{ info.other_contacts|linebreaks }}
-        <p>Bio:</p>{{ info.bio|linebreaks }}
+        {{ contact.other_contacts|linebreaks }}
+        <p>Bio:</p>{{ contact.bio|linebreaks }}
     </div>
 </article>
 {% endblock %}

@@ -6,25 +6,29 @@
 
 {% block content %}
 <form id="ContactForm" enctype="multipart/form-data" action="" method="post">
-    {% csrf_token %}
-    <div class="left-column">
-    {% for field in form %}
+    <div id="ajaxwrapper">
+        {% csrf_token %}
+        <div class="left-column">
+        {% for field in form %}
 
-        {{ field.label_tag }}
-        {{ field }}
-        <div class="errorfield">{{ field.errors }}</div>
-        {% if field.name = 'photo' %}
-            {% if contact.photo %}
-                <img src="{{ contact.photo.url }}" alt="Photo" />
+            {{ field.label_tag }}
+            {{ field }}
+            <div class="errorfield">{{ field.errors }}</div>
+            {% if field.name = 'photo' %}
+                {% if contact.photo %}
+                    <img src="{{ contact.photo.url }}" alt="Photo" />
+                {% endif %}
+            </div>
+            <div class="right-column">
             {% endif %}
+        {% endfor %}
         </div>
-        <div class="right-column">
-        {% endif %}
-    {% endfor %}
+        <div class="clearer"></div>
+        <p id="sendwrapper">
+            <input type="submit" value="Save" id="id_sendbutton"/>
+            <a href="{% url contact.views.index %}">Cancel</a>
+        </p>
     </div>
-    <div class="clearer"></div>
-    <input type="submit" value="Save" />
-    <a href="{% url contact.views.index %}">Cancel</a>
 </form>
 {% endblock %}
 
