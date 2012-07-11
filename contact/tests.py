@@ -93,3 +93,10 @@ class ContactEditTest(TestCase):
         self.assertContains(response, data['other_contacts'])
         # for item in data.values():
         #     self.assertContains(response, escape(item))
+
+
+class EditLinkTest(TestCase):
+    def test_edit_link(self):
+        response = self.client.get(reverse('contact.views.index'))
+        admin_url = reverse('admin:contact_contact_change', args=(1,))
+        self.assertContains(response, admin_url)
