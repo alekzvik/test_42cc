@@ -5,6 +5,7 @@ from django.template.defaultfilters import escape, date, linebreaks
 from django.template import RequestContext
 from django.conf import settings
 from django.test.client import RequestFactory
+from contact.templatetags.contact_tags import edit_link
 from django.db import models
 from contact.management.commands.print_models import Command
 
@@ -98,10 +99,14 @@ class ContactEditTest(TestCase):
 
 
 class EditLinkTest(TestCase):
-    def test_edit_link(self):
+    def test_edit_link_index(self):
         response = self.client.get(reverse('contact.views.index'))
         admin_url = reverse('admin:contact_contact_change', args=(1,))
         self.assertContains(response, admin_url)
+
+    def test_edit_link(self):
+        contact = Contact.objects.get(pk=1)
+        self.assertEqual(edit_link(contact), '/admin/contact/contact/1/')
 
 
 class CommandTest(TestCase):
