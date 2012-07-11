@@ -109,6 +109,6 @@ class CommandTest(TestCase):
         result = {}
         all_models = models.get_models()
         for model in all_models:
-            result[model] = model.count()
+            result[model] = model.objects.count()
         command = Command()
-        self.assertEqual(command.project_models, result)
+        self.assertEqual(command.project_models(), result)
