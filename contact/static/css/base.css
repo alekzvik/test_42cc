@@ -14,4 +14,4 @@ textarea {
     clear: both;
 }
 
-#edit-link { float: right; }
+.header-links { float: right; }

@@ -3,7 +3,11 @@
 {% block title %}Contacts{% endblock %}
 
 {% block header %}
-    <a href="{% url contact_edit %}" id="edit-link">Edit</a>
+    {% load contact_tags %}
+    <div class="header-links">
+        <a href="{% url contact_edit %}">Edit</a>
+        <a href="{% edit_link contact %}">(admin)</a>
+    </div>
     <h1>42 Coffee Cups Test Assignment</h1>
 {% endblock %}
 
