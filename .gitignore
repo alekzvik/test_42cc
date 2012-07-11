@@ -28,3 +28,6 @@ pip-log.txt
 
 # db files
 *.sqlite3
+
+#command data
+*.dat
