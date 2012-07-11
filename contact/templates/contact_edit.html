@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 <form id="ContactForm" enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
@@ -22,6 +27,7 @@
     <a href="{% url contact.views.index %}">Cancel</a>
 </form>
 {% endblock %}
+
 {% block footer %}
 <hr />
 <a href="{% url requests_view %}">requests</a>
