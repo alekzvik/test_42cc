@@ -8,6 +8,9 @@ jQuery(function() {
             form.serializeArray(),
             function(responseText, responseStatus) {
                 jQuery("#id_sendbutton").attr('disabled', false)
+                if (responseText == 'redirect'){
+                    window.location = '/'
+                }
             }
         );
         e.preventDefault();
