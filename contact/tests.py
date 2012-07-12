@@ -26,6 +26,11 @@ class ContactTest(TestCase):
         self.assertContains(response, linebreaks(escape(data.bio)))
         self.assertContains(response, linebreaks(escape(data.other_contacts)))
 
+    def test_edit_link(self):
+        response = self.client.get(reverse('contact.views.index'))
+        admin_url = reverse('admin:contact_contact_change', args=(1,))
+        self.assertContains(response, admin_url)
+
 
 class BadResponseTest(TestCase):
     def test_404(self):
@@ -97,11 +102,6 @@ class ContactEditTest(TestCase):
 
 
 class EditLinkTest(TestCase):
-    def test_edit_link_index(self):
-        response = self.client.get(reverse('contact.views.index'))
-        admin_url = reverse('admin:contact_contact_change', args=(1,))
-        self.assertContains(response, admin_url)
-
-    def test_edit_link(self):
+    def test_edit_link_tag(self):
         contact = Contact.objects.get(pk=1)
         self.assertEqual(edit_link(contact), '/admin/contact/contact/1/')
