@@ -5,6 +5,9 @@ from django.template.defaultfilters import escape, date, linebreaks
 from django.template import RequestContext
 from django.conf import settings
 from django.test.client import RequestFactory
+from django.test import LiveServerTestCase
+from selenium import webdriver
+import time
 
 
 class ContactTest(TestCase):
@@ -91,5 +94,42 @@ class ContactEditTest(TestCase):
         self.assertContains(response, data['skype'])
         self.assertContains(response, escape(data['bio']))
         self.assertContains(response, data['other_contacts'])
-        # for item in data.values():
-        #     self.assertContains(response, escape(item))
+
+
+class AjaxSeleniumTest(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        settings.DEBUG = True
+        cls.driver = webdriver.Firefox()
+        super(AjaxSeleniumTest, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(AjaxSeleniumTest, cls).tearDownClass()
+        cls.driver.quit()
+
+    def test_ajax_form(self):
+        driver = self.driver
+        driver.get(self.live_server_url + "/edit/")
+        driver.find_element_by_id("id_username").clear()
+        driver.find_element_by_id("id_username").send_keys("admin")
+        driver.find_element_by_id("id_password").clear()
+        driver.find_element_by_id("id_password").send_keys("admin")
+        driver.find_element_by_id("login_form").submit()
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("test")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("test@example.com")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
+        # self.assertTrue(driver.find_element_by_id("id_sendbutton").is_enabled())
