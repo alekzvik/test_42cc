@@ -124,6 +124,8 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+SOUTH_TESTS_MIGRATE = False
+
 INSTALLED_APPS = (
     'models_log',
     'south',
