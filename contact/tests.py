@@ -6,7 +6,8 @@ from django.template import RequestContext
 from django.conf import settings
 from django.test.client import RequestFactory
 from django.test import LiveServerTestCase
-from selenium import webdriver
+from selenium.webdriver.firefox.webdriver import WebDriver
+from django.test.utils import override_settings
 import time
 
 
@@ -118,19 +119,18 @@ class AjaxSimpleTest(TestCase):
                 self.assertEqual(getattr(contact, key), value)
 
 
+@override_settings(DEBUG=True)
 class AjaxSeleniumTest(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        settings.DEBUG = True
-        cls.driver = webdriver.Firefox()
+        cls.driver = WebDriver()
         super(AjaxSeleniumTest, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
         super(AjaxSeleniumTest, cls).tearDownClass()
         cls.driver.quit()
-        settings.DEBUG = False
 
     def test_ajax_form_selenium(self):
         driver = self.driver
