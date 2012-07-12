@@ -4,6 +4,7 @@ from contact.forms import ContactForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.conf import settings
 
 
 def index(request):
@@ -13,25 +14,21 @@ def index(request):
 
 @login_required
 def contact_edit(request):
+
+    if request.is_ajax():  # only if AJAX
+        if getattr(settings, 'DEBUG', False):  # only if DEBUG=True
+            import time
+            time.sleep(1)
+
     contact = get_object_or_404(Contact)
     if request.method == 'POST':
-        form = ContactForm(request.POST)  # initial=contact.__dict__
+        form = ContactForm(request.POST, instance=contact)
         if form.is_valid():
-            contact.name = form.cleaned_data['name']
-            contact.last_name = form.cleaned_data['last_name']
-            contact.last_name = form.cleaned_data['last_name']
-            contact.birth_date = form.cleaned_data['birth_date']
-            contact.email = form.cleaned_data['email']
-            contact.jabber = form.cleaned_data['jabber']
-            contact.skype = form.cleaned_data['skype']
-            contact.bio = form.cleaned_data['bio']
-            contact.other_contacts = form.cleaned_data['other_contacts']
-            contact.photo = form.cleaned_data['photo']
-            contact.save()
+            form.save()
             if request.is_ajax():
                 return HttpResponse("redirect")
             else:
                 return redirect(reverse('contact.views.index'))
     else:
-        form = ContactForm(initial=contact.__dict__)
+        form = ContactForm(instance=contact)
     return render(request, 'contact_edit.html', {'form': form})

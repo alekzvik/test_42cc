@@ -8,6 +8,9 @@ from django.test.client import RequestFactory
 from contact.templatetags.contact_tags import edit_link
 from django.db import models
 from contact.management.commands.print_models import Command
+from django.test import LiveServerTestCase
+from selenium import webdriver
+import time
 
 
 class ContactTest(TestCase):
@@ -99,8 +102,6 @@ class ContactEditTest(TestCase):
         self.assertContains(response, data['skype'])
         self.assertContains(response, escape(data['bio']))
         self.assertContains(response, data['other_contacts'])
-        # for item in data.values():
-        #     self.assertContains(response, escape(item))
 
 
 class EditLinkTest(TestCase):
@@ -125,3 +126,64 @@ class CommandTest(TestCase):
             result[model] = model.objects.count()
         command = Command()
         self.assertEqual(command.project_models(), result)
+
+
+class AjaxSimpleTest(TestCase):
+    def test_ajax_form(self):
+        data = dict()
+        data['name'] = 'Robin'
+        data['last_name'] = 'Poulsen'
+        data['birth_date'] = '1983-01-05'
+        data['email'] = 'rpoulsen@gmail.com'
+        data['jabber'] = 'rpoulsen@gmail.com'
+        data['skype'] = 'rpoulsen'
+        data['bio'] = "I'm a sweden django guru."
+        data['other_contacts'] = "My facebook: facebook.com/rpoulsen"
+        self.client.login(username='admin', password='admin')
+        self.client.post(reverse('contact_edit'), data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(Contact.objects.count(), 1)
+
+        contact = Contact.objects.get(pk=1)
+        for key, value in data.items():
+            if key != 'birth_date':
+                self.assertEqual(getattr(contact, key), value)
+
+
+class AjaxSeleniumTest(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        settings.DEBUG = True
+        cls.driver = webdriver.Firefox()
+        super(AjaxSeleniumTest, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(AjaxSeleniumTest, cls).tearDownClass()
+        cls.driver.quit()
+        settings.DEBUG = False
+
+    def test_ajax_form_selenium(self):
+        driver = self.driver
+        driver.get(self.live_server_url + "/edit/")
+        driver.find_element_by_id("id_username").clear()
+        driver.find_element_by_id("id_username").send_keys("admin")
+        driver.find_element_by_id("id_password").clear()
+        driver.find_element_by_id("id_password").send_keys("admin")
+        driver.find_element_by_id("login_form").submit()
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("test")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("test@example.com")
+        driver.find_element_by_id("id_sendbutton").click()
+        self.assertFalse(driver.find_element_by_id("id_sendbutton").is_enabled())
+        time.sleep(1)
