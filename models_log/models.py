@@ -17,7 +17,7 @@ class ModelLog(models.Model):
     changed_pk = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(ContentType)
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = generic.GenericForeignKey('content_type', 'changed_pk')
 
     class Meta:
         get_latest_by = 'timestamp'
