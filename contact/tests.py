@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from contact.models import Contact
 from django.template.defaultfilters import escape, date, linebreaks
-from django.template import RequestContext
+from django.template import RequestContext, Template, Context
 from django.conf import settings
 from django.test.client import RequestFactory
 from contact.templatetags.contact_tags import edit_link
@@ -105,3 +105,11 @@ class EditLinkTest(TestCase):
     def test_edit_link_tag(self):
         contact = Contact.objects.get(pk=1)
         self.assertEqual(edit_link(contact), '/admin/contact/contact/1/')
+
+    def test_edit_link_in_context(self):
+        rendered = Template(
+            '{% load contact_tags %}'
+            '{% edit_link object %}'
+        ).render(Context({'object': Contact.objects.get(pk=1)}))
+
+        self.assertTrue('admin/contact/contact/1/' in rendered)
