@@ -22,7 +22,7 @@ def contact_edit(request):
 
     contact = get_object_or_404(Contact)
     if request.method == 'POST':
-        form = ContactForm(request.POST, instance=contact)  # initial=contact.__dict__
+        form = ContactForm(request.POST, instance=contact)
         if form.is_valid():
             form.save()
             if request.is_ajax():
@@ -30,6 +30,5 @@ def contact_edit(request):
             else:
                 return redirect(reverse('contact.views.index'))
     else:
-        # form = ContactForm(initial=contact.__dict__)
         form = ContactForm(instance=contact)
     return render(request, 'contact_edit.html', {'form': form})
