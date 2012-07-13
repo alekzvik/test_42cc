@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'south',
     'contact',
     'requests_log',
+    'functional_tests',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
