@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'contact',
     'requests_log',
     'south',
-    'functional_tests',
 )
 
 # A sample logging configuration. The only tangible logging

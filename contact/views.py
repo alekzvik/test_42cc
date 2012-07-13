@@ -4,7 +4,6 @@ from contact.forms import ContactForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.conf import settings
 
 
 def index(request):
@@ -14,12 +13,6 @@ def index(request):
 
 @login_required
 def contact_edit(request):
-
-    if request.is_ajax():  # only if AJAX
-        if getattr(settings, 'DEBUG', False):  # only if DEBUG=True
-            import time
-            time.sleep(1)
-
     contact = get_object_or_404(Contact)
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)
