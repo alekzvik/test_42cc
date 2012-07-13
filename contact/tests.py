@@ -5,10 +5,6 @@ from django.template.defaultfilters import escape, date, linebreaks
 from django.template import RequestContext
 from django.conf import settings
 from django.test.client import RequestFactory
-from django.test import LiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
-from django.test.utils import override_settings
-import time
 
 
 class ContactTest(TestCase):
