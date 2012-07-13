@@ -8,10 +8,6 @@ from django.test.client import RequestFactory
 from contact.templatetags.contact_tags import edit_link
 from django.db import models
 from contact.management.commands.print_models import Command
-from django.test import LiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
-from django.test.utils import override_settings
-import time
 
 
 class ContactTest(TestCase):
