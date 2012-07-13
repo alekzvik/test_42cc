@@ -8,5 +8,8 @@ class RequestEntry(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     priority = models.SmallIntegerField(default=1)
 
+    def __unicode__(self):
+        return u"%s %s%s" % (self.method.upper(), self.path, self.query)
+
     class Meta():
         ordering = ["-priority", "timestamp"]
