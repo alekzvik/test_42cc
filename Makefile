@@ -8,3 +8,6 @@ syncdb:
 
 test:
 	python manage.py test ${app}
+
+func_tests:
+	python manage.py test functional_tests
