@@ -2,20 +2,25 @@
 {% block title %}Requests{% endblock %}
 {% block content %}
 <table>
+    {% load contact_tags %}
     <tr>
         <th>#</th>
+        <th>Priority</th>
         <th>Path</th>
         <th>Method</th>
         <th>Query</th>
         <th>Time</th>
+        <th>Action</th>
     </tr>
     {% for request in requests %}
     <tr>
         <td>{{ request.pk }}</td>
+        <td>{{ request.priority }}</td>
         <td>{{ request.path }}</td>
         <td>{{ request.method }}</td>
         <td>{{ request.query }}</td>
         <td>{{ request.timestamp }}</td>
+        <td><a href="{% edit_link request %}">edit</a></td>
     </tr>
     {% endfor %}
 </table>
