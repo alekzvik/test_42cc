@@ -39,3 +39,26 @@ class ViewTest(TestCase):
 
     def tearDown(self):
         RequestEntry.objects.all().delete()
+
+
+class PriorityTest(TestCase):
+    def setUp(self):
+        RequestEntry.objects.all().delete()
+
+    def tearDown(self):
+        RequestEntry.objects.all().delete()
+
+    def test_default_priority(self):
+        self.client.get('/')
+        entry = RequestEntry.objects.get(pk=1)
+        self.assertEqual(entry.priority, 1)
+
+    def test_priority_ordering(self):
+        for i in range(20):
+            self.client.get('/')
+        self.client.get('/edit/')
+        entry = RequestEntry.objects.latest('timestamp')
+        entry.priority = 5
+        entry.save()
+        response = self.client.get(reverse('requests_view'))
+        self.assertContains(response, '/edit/')
