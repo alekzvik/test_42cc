@@ -1,27 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Requests{% endblock %}
 {% block content %}
-<table>
-    {% load contact_tags %}
-    <tr>
-        <th>#</th>
-        <th>Priority</th>
-        <th>Path</th>
-        <th>Method</th>
-        <th>Query</th>
-        <th>Time</th>
-        <th>Action</th>
-    </tr>
-    {% for request in requests %}
-    <tr>
-        <td>{{ request.pk }}</td>
-        <td>{{ request.priority }}</td>
-        <td>{{ request.path }}</td>
-        <td>{{ request.method }}</td>
-        <td>{{ request.query }}</td>
-        <td>{{ request.timestamp }}</td>
-        <td><a href="{% edit_link request %}">edit</a></td>
-    </tr>
-    {% endfor %}
-</table>
+{% load contact_tags %}
+<form method="POST" action="{% url requests_log.views.priority_update %}">
+    <table>
+        {% csrf_token %}
+        <tr>
+            <th>#</th>
+            <th>Priority</th>
+            <th>Path</th>
+            <th>Method</th>
+            <th>Query</th>
+            <th>Time</th>
+            <th>Set priority</th>
+        </tr>
+        {% for request, form in objects %}
+        <tr>
+            <td>{{ request.pk }}</td>
+            <td>{{ request.priority }}</td>
+            <td>{{ request.path }}</td>
+            <td>{{ request.method }}</td>
+            <td>{{ request.query }}</td>
+            <td>{{ request.timestamp }}</td>
+            <td>
+                {% for choice in form.priority %}
+                    {{ choice }}
+                {% endfor %}
+                {{ form.id }}
+            </td>
+        </tr>
+        {% endfor %}
+        {{ formset.management_form }}
+    </table>
+    <input type="submit" value="Save" />
+</form>
 {% endblock %}
+
+    {% for request in requests_form %}
+    {% endfor %}
+
+    <a href="{% url requests_log.views.priority_update %}">edit</a>
+                <!-- <input type="hidden" {{form.id}} /> -->
