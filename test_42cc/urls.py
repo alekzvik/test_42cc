@@ -10,7 +10,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^', include('contact.urls')),
-    url(r'^requests', include('requests_log.urls')),
+    url(r'^requests/', include('requests_log.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$',
