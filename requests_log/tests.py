@@ -12,7 +12,7 @@ class NoLogsTest(TestCase):
 class LinkTest(TestCase):
     def test_link(self):
         response = self.client.get(reverse('contact.views.index'))
-        self.assertContains(response, 'href="/requests"')
+        self.assertContains(response, 'href="/requests/"')
 
     def tearDown(self):
         RequestEntry.objects.all().delete()
